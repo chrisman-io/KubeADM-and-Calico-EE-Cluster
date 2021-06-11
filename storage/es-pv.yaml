@@ -11,6 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: tigera-elasticsearch
   local:
+# This path specifies the directory on the Node which is the mount target. Ensure this directory is created
     path: /var/log/calico-ee
   nodeAffinity:
     required:
@@ -19,5 +20,6 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
+# Specifies which value (node) the Persistant Volume is bound to
           - k8s-master-01
           - k8s-worker-01
