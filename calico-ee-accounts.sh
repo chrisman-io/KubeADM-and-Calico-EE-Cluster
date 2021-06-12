@@ -16,4 +16,4 @@ kubectl create clusterrolebinding $username-access --clusterrole tigera-network-
 kubectl get secret $(kubectl get serviceaccount $username -o jsonpath='{range .secrets[*]}{.name}{"\n"}{end}' | grep token) -o go-template='{{.data.token | base64decode}}' && echo > ui-token.txt
 
 # Obtain the password for user elastic to log into Kibana
-kubectl -n tigera-elasticsearch get secret tigera-secure-es-elastic-user -o go-template='{{.data.elastic | base64decode}}' && echo > kibana-token.txt
+kubectl -n tigera-elasticsearch get secret tigera-secure-es-elastic-user -o go-template='{{.data.elastic | base64decode}}' && echo > kibana-password.txt
