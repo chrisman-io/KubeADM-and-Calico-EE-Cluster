@@ -17,3 +17,4 @@ kubectl get secret $(kubectl get serviceaccount $username -o jsonpath='{range .s
 
 # Obtain the password for user elastic to log into Kibana
 kubectl -n tigera-elasticsearch get secret tigera-secure-es-elastic-user -o go-template='{{.data.elastic | base64decode}}' && echo > kibana-password.txt
+
