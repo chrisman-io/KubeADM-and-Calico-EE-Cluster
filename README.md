@@ -35,20 +35,21 @@ CIDR range for Cluster: (e.g. 10.244.0.0/16)
 Initialized Master Node with CIDR range 10.10.0.0/16 - Cluster token found in cluster_token.txt
 ```
 
-On the master node the token for worker nodes to join the cluster is contained in the newly created file cluster_token.txt. Repeat the initial setup on each node using the `setup.sh` script.
+On the master node the token for worker nodes to join the cluster is contained in the newly created file cluster_token.txt.
 
 
 
 ## Master Node Preparation ##
-Storage is required in order to provision the Calico EE components for logging and reporting. This guides walks through configuring a local volume one of the Kubernetes Nodes. This requires creating a Persistant Volume and enables mounting to the local Node directory. For this installation a directory of /var/log/calico-ee is created on Node k8s-worker-01 prior to the following steps. 
+Storage is required in order to provision the Calico EE components for logging and reporting. This guides walks through configuring a local volume one of the Kubernetes Nodes. This requires creating a Persistant Volume and enables mounting to the local Node directory. For this installation a directory of /var/log/calico-ee is created on Node k8s-worker-01 prior to the following steps e.g. `mkdir /var/log/calico-ee`.   
 
+Run the follow on the master node:
 
 ```
 kubectl apply -f ./storage/storageclass.yaml
 kubectl apply -f ./storage/es-pv.yaml
 ```
 
-Run the `calico-ee-setup.sh` script to begin installation of the Calico CNI and Calico EE components. The config.json file is expected at the root of this cloned directory.
+Run the `calico-ee-setup.sh` script on the master node to begin installation of the Calico CNI and Calico EE components. The config.json file is expected at the root of this cloned directory.
 
 ```
 bash calico-ee-setup.sh
@@ -60,9 +61,22 @@ Install the Calico EE licensing. The license.yaml file is expected at the root o
 \
 Wait until all component status is `Available`  
 
+## Worker Node Setup ##
+Now that a CNI has been deployed the worker nodes can be provisioned and joined to the cluster. Run the `setup.sh` script on each worker node
+
+```
+bash setup.sh
+```
+The worker node can be joined to the cluster using the kubeadm join command listed in cluster_token.txt. Check on the master node for worker nodes to be joined
+
+```
+kubectl get nodes -o wide
+``` 
+
+
 ## User Accounts and Tokens ##
 
-Run the script `calico-ee-accounts.sh` to create user accounts to login into the UI. The token required to log into the UI is written to ui-token.txt and the password for kibana is written to kibana-password.txt
+Run the script `calico-ee-accounts.sh` on the master node to create user accounts to login into the UI. The token required to log into the UI is written to ui-token.txt and the password for kibana is written to kibana-password.txt
 
 ```
 bash calico-ee-accounts.sh
@@ -70,7 +84,7 @@ bash calico-ee-accounts.sh
 
 ## Exposing the UI interface ##
 
-There are several options how to access the UI. This guide exposes the tigera-manager service as a NodePort on port 32000 which allows a user to target any of the of the Worker Node IP address on port 32000 to access the UI. As the default installation deploys the service with a cluster IP the Service needs to be deleted and recreated
+There are several options how to access the UI. This guide exposes the tigera-manager service as a NodePort on port 32000 which allows a user to target any of the of the Worker Node IP address on port 32000 to access the UI. As the default installation deploys the service with a cluster IP the Service needs to be deleted and recreate. Run the script on the master node:
 
 ```
 bash ui-nodeport.sh
