@@ -71,10 +71,11 @@ sudo systemctl restart docker
 sudo apt-mark hold docker-ce kubelet kubeadm kubectl
 
 # run on master node
-if ["$mastercheck" == 'yes']; then
+if [ "$mastercheck" == 'yes' ]; then
   echo "CIDR range for Cluster: (e.g. 10.244.0.0/16)"
   read CIDR
-  sudo kubeadm init --pod-network-cidr=$CIDR > cluster_token.txt
+  sudo kubeadm init --pod-network-cidr=$CIDR > cluster_token2.txt
+  grep join cluster_token2.txt > cluster_token.txt && rm cluster_token2.txt
   mkdir -p $HOME/.kube
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
