@@ -12,14 +12,13 @@ https://docs.tigera.io/about/about-calico-enterprise
   
 ## Initial Setup ##
 
-Ensure you are at the root of the KubeADM-and-Calico-EE-Cluster directory. Run the intial setup script and enter the required variables. Commands are run as root and will require the password
-
-
+Ensure you are at the root of the KubeADM-and-Calico-EE-Cluster directory. Run the intial setup script and enter the required variables. Commands are run as root and will require the password.  
+To review which Docker Engine version are available run `apt-cache madison docker-ce`  
 
 ```
 $ cd ./KubeADM-and-Calico-EE-Cluster/
 $ bash setup.sh
-Which version of Docker (eg 19.03.14,20.10.0)
+Which version of Docker (eg 19.03.14)
 19.03.14
 Which Kubernetes version (eg. 1.19.0-00, 1.20.0-00)
 1.19.0-00
