@@ -12,13 +12,13 @@ https://docs.tigera.io/about/about-calico-enterprise
   
 ## Initial Setup ##
 
-Ensure you are at the root of the KubeADM-and-Calico-EE-Cluster directory. Run the intial setup script and enter the required variables. Commands are run as root and will require the password
-
-
+Ensure you are at the root of the KubeADM-and-Calico-EE-Cluster directory. Run the intial setup script and enter the required variables. Commands are run as root and will require the password.  
+To review which Docker Engine version are available run `apt-cache madison docker-ce`  
 
 ```
+$ cd ./KubeADM-and-Calico-EE-Cluster/
 $ bash setup.sh
-Which version of Docker (eg 19.03.14,20.10.0)
+Which version of Docker (eg 19.03.14)
 19.03.14
 Which Kubernetes version (eg. 1.19.0-00, 1.20.0-00)
 1.19.0-00
@@ -37,7 +37,17 @@ Initialized Master Node with CIDR range 10.10.0.0/16 - Cluster token found in cl
 
 On the master node the token for worker nodes to join the cluster is contained in the newly created file cluster_token.txt.
 
+## Worker Node Setup ##
+The worker nodes can be provisioned and joined to the cluster. Run the `setup.sh` script on each worker node
 
+```
+bash setup.sh
+```
+The worker node can be joined to the cluster using the kubeadm join command listed in cluster_token.txt. Check on the master node for worker nodes to be joined
+
+```
+kubectl get nodes -o wide
+```
 
 ## Master Node Preparation ##
 Storage is required in order to provision the Calico EE components for logging and reporting. This guides walks through configuring a local volume one of the Kubernetes Nodes. This requires creating a Persistant Volume and enables mounting to the local Node directory. For this installation a directory of /var/log/calico-ee is created on Node k8s-worker-01 prior to the following steps e.g. `mkdir /var/log/calico-ee`.   
@@ -55,23 +65,13 @@ Run the `calico-ee-setup.sh` script on the master node to begin installation of 
 bash calico-ee-setup.sh
 ```
 \
+Check for valid config.json and license.yaml files if you are presented with errors at this stage
+\
 Wait until the `apiserver` status is `Available`
 
 Install the Calico EE licensing. The license.yaml file is expected at the root of this cloned directory. 
 \
-Wait until all component status is `Available`  
-
-## Worker Node Setup ##
-Now that a CNI has been deployed the worker nodes can be provisioned and joined to the cluster. Run the `setup.sh` script on each worker node
-
-```
-bash setup.sh
-```
-The worker node can be joined to the cluster using the kubeadm join command listed in cluster_token.txt. Check on the master node for worker nodes to be joined
-
-```
-kubectl get nodes -o wide
-``` 
+Wait until all component status is `Available`    
 
 
 ## User Accounts and Tokens ##

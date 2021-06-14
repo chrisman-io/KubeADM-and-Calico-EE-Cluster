@@ -43,6 +43,8 @@ echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https:/
 sudo apt-get update
 sudo apt-get install -y  kubelet=$versionk8s kubeadm=$versionk8s kubectl=$versionk8s
 echo 'source <(kubectl completion bash)' >>~/.bashrc
+
+# Assuming bash is the shell. This re-initializes the shell session. Change your relevant shell script if needed
 sudo apt-get update
 echo "installed kubeadm, kubeket and kubectl"
 echo "Disabling swap"
@@ -62,6 +64,8 @@ sudo sed -i '/^\/swap/d' /etc/fstab
 #    SystemdCgroup = true
 #sudo sed -i '/containerd.runtimes.runc.options/a \            \SystemdCgroup = true' /etc/containerd/config.toml 
 #sudo systemctl restart containerd
+
+# Changing Docker cgroup driver to use systemd
 sudo tee -a /etc/docker/daemon.json << END
 {
   "exec-opts": ["native.cgroupdriver=systemd"]
@@ -69,16 +73,17 @@ sudo tee -a /etc/docker/daemon.json << END
 END
 sudo systemctl restart docker
 sudo apt-mark hold docker-ce kubelet kubeadm kubectl
-
 # run on master node
 if [ "$mastercheck" == 'yes' ]; then
   echo "CIDR range for Cluster: (e.g. 10.244.0.0/16)"
   read CIDR
   sudo kubeadm init --pod-network-cidr=$CIDR > cluster_token2.txt
-  grep join cluster_token2.txt > cluster_token.txt && rm cluster_token2.txt
+  awk '/kubeadm join/,0' cluster_token2.txt > cluster_token.txt && rm cluster_token2.txt
+  sed -i '1s/^/sudo /' cluster_token.txt
   mkdir -p $HOME/.kube
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
   echo "Initialized Master Node with CIDR range $CIDR - Cluster token found in cluster_token.txt "
-fi  
+fi
+source ~/.bashrc  
 echo "Installation complete"
