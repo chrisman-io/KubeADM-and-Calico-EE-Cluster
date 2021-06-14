@@ -1,5 +1,5 @@
 #!/bin/sh
-
+  
 # Install the following network policies to secure Calico Enterprise component communications
 kubectl create -f https://docs.tigera.io/manifests/tigera-policies.yaml
 
@@ -13,8 +13,9 @@ kubectl create sa $username -n default
 kubectl create clusterrolebinding $username-access --clusterrole tigera-network-admin --serviceaccount default:$username
 
 # Obtain token for service account which is used to log into the UI
-kubectl get secret $(kubectl get serviceaccount $username -o jsonpath='{range .secrets[*]}{.name}{"\n"}{end}' | grep token) -o go-template='{{.data.token | base64decode}}' && echo > ui-token.txt
+kubectl get secret $(kubectl get serviceaccount $username -o jsonpath='{range .secrets[*]}{.name}{"\n"}{end}' | grep token) -o go-template='{{.data.token | base64decode}}' > ui-token.txt && echo "UI token generated and found in ui-token.txt"
 
 # Obtain the password for user elastic to log into Kibana
-kubectl -n tigera-elasticsearch get secret tigera-secure-es-elastic-user -o go-template='{{.data.elastic | base64decode}}' && echo > kibana-password.txt
+kubectl -n tigera-elasticsearch get secret tigera-secure-es-elastic-user -o go-template='{{.data.elastic | base64decode}}' > kibana-password.txt && \
+        echo "Kibana password found in kibana-password.txt"
 
