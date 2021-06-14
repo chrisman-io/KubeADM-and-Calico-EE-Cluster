@@ -45,7 +45,6 @@ sudo apt-get install -y  kubelet=$versionk8s kubeadm=$versionk8s kubectl=$versio
 echo 'source <(kubectl completion bash)' >>~/.bashrc
 
 # Assuming bash is the shell. This re-initializes the shell session. Change your relevant shell script if needed
-source ~/.bashrc
 sudo apt-get update
 echo "installed kubeadm, kubeket and kubectl"
 echo "Disabling swap"
@@ -74,7 +73,6 @@ sudo tee -a /etc/docker/daemon.json << END
 END
 sudo systemctl restart docker
 sudo apt-mark hold docker-ce kubelet kubeadm kubectl
-
 # run on master node
 if [ "$mastercheck" == 'yes' ]; then
   echo "CIDR range for Cluster: (e.g. 10.244.0.0/16)"
@@ -86,5 +84,6 @@ if [ "$mastercheck" == 'yes' ]; then
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
   echo "Initialized Master Node with CIDR range $CIDR - Cluster token found in cluster_token.txt "
-fi  
+fi
+source ~/.bashrc  
 echo "Installation complete"
