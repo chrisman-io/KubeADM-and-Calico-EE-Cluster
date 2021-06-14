@@ -37,7 +37,17 @@ Initialized Master Node with CIDR range 10.10.0.0/16 - Cluster token found in cl
 
 On the master node the token for worker nodes to join the cluster is contained in the newly created file cluster_token.txt.
 
+## Worker Node Setup ##
+The worker nodes can be provisioned and joined to the cluster. Run the `setup.sh` script on each worker node
 
+```
+bash setup.sh
+```
+The worker node can be joined to the cluster using the kubeadm join command listed in cluster_token.txt. Check on the master node for worker nodes to be joined
+
+```
+kubectl get nodes -o wide
+```
 
 ## Master Node Preparation ##
 Storage is required in order to provision the Calico EE components for logging and reporting. This guides walks through configuring a local volume one of the Kubernetes Nodes. This requires creating a Persistant Volume and enables mounting to the local Node directory. For this installation a directory of /var/log/calico-ee is created on Node k8s-worker-01 prior to the following steps e.g. `mkdir /var/log/calico-ee`.   
@@ -61,19 +71,7 @@ Wait until the `apiserver` status is `Available`
 
 Install the Calico EE licensing. The license.yaml file is expected at the root of this cloned directory. 
 \
-Wait until all component status is `Available`  
-
-## Worker Node Setup ##
-Now that a CNI has been deployed the worker nodes can be provisioned and joined to the cluster. Run the `setup.sh` script on each worker node
-
-```
-bash setup.sh
-```
-The worker node can be joined to the cluster using the kubeadm join command listed in cluster_token.txt. Check on the master node for worker nodes to be joined
-
-```
-kubectl get nodes -o wide
-``` 
+Wait until all component status is `Available`    
 
 
 ## User Accounts and Tokens ##
