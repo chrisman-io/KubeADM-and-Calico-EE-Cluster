@@ -80,7 +80,7 @@ if [ "$mastercheck" == 'yes' ]; then
   echo "CIDR range for Cluster: (e.g. 10.244.0.0/16)"
   read CIDR
   sudo kubeadm init --pod-network-cidr=$CIDR > cluster_token2.txt
-  awk '/kubeadm join/,0' test.txt > cluster_token.txt && rm cluster_token2.txt
+  awk '/kubeadm join/,0' cluster_token2.txt > cluster_token.txt && rm cluster_token2.txt
   sed -i '1s/^/sudo /' cluster_token.txt
   mkdir -p $HOME/.kube
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
