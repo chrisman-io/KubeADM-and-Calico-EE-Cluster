@@ -67,10 +67,14 @@ bash calico-ee-setup.sh
 \
 Check for valid config.json and license.yaml files if you are presented with errors at this stage
 \
-Wait until the `apiserver` status is `Available`
+Wait until the `apiserver` status is `Available`.  
+  
+Install the Calico EE licensing. The license.yaml file is expected at the root of this cloned directory.   
+  
+```
+bash calico-ee-license.sh
+```
 
-Install the Calico EE licensing. The license.yaml file is expected at the root of this cloned directory. 
-\
 Wait until all component status is `Available`    
 
 
@@ -90,7 +94,7 @@ There are several options how to access the UI. This guide exposes the tigera-ma
 bash ui-nodeport.sh
 ```
 
-Now the UI is exposed on a node port a user can log into the UI on https://`<Worker Node IP>`:9443. The token for logging in is contained in file ui-token.txt. \
+Now the UI is exposed on a node port a user can log into the UI on https://`<Worker Node IP>`:9443. The token for logging in is contained in file ui-token.txt.  
 
 Log into Kibana useing `elastic` as the username and the password contained in the file kibana-password.txt
 
