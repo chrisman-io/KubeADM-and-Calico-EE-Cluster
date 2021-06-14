@@ -17,6 +17,7 @@ Ensure you are at the root of the KubeADM-and-Calico-EE-Cluster directory. Run t
 
 
 ```
+$ cd ./KubeADM-and-Calico-EE-Cluster/
 $ bash setup.sh
 Which version of Docker (eg 19.03.14,20.10.0)
 19.03.14
@@ -54,6 +55,8 @@ Run the `calico-ee-setup.sh` script on the master node to begin installation of 
 ```
 bash calico-ee-setup.sh
 ```
+\
+Check for valid config.json and license.yaml files if you are presented with errors at this stage
 \
 Wait until the `apiserver` status is `Available`
 
